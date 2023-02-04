@@ -6,6 +6,10 @@ Filter::Filter()
 {
 }
 
+void Filter::propagate_update(double t)
+{
+}
+
 Filter::~Filter()
 {
 }

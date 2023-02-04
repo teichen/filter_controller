@@ -6,6 +6,10 @@ HarmonicModel::HarmonicModel()
 {
 }
 
+void HarmonicModel::rate(double x[4])
+{
+}
+
 HarmonicModel::~HarmonicModel()
 {
 }

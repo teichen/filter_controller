@@ -9,6 +9,9 @@ class VanderPolModel
 public:
 
     VanderPolModel();
+    
+    void rate(double[4]);
+    
     ~VanderPolModel();
 
 private:

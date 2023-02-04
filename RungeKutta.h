@@ -9,6 +9,9 @@ class RungeKutta
 public:
 
     RungeKutta();
+    
+    void propagate();
+
     ~RungeKutta();
 
 private:

@@ -9,6 +9,9 @@ class HarmonicModel
 public:
 
     HarmonicModel();
+    
+    void rate(double[4]);
+
     ~HarmonicModel();
 
 private:

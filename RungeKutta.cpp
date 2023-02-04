@@ -6,6 +6,10 @@ RungeKutta::RungeKutta()
 {
 }
 
+void RungeKutta::propagate()
+{
+}
+
 RungeKutta::~RungeKutta()
 {
 }

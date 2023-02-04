@@ -9,6 +9,9 @@ class Filter
 public:
 
     Filter();
+
+    void propagate_update(double);
+
     ~Filter();
 
 private:

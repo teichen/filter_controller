@@ -6,6 +6,10 @@ VanderPolModel::VanderPolModel()
 {
 }
 
+void VanderPolModel::rate(double x[4])
+{
+}
+
 VanderPolModel::~VanderPolModel()
 {
 }
