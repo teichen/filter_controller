@@ -8,7 +8,12 @@ class Filter
 {
 public:
 
+    bool mem_test;
+
     Filter();
+
+    int n_states;
+    void initarrays();
 
     void propagate_update(double);
 

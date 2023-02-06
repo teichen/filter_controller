@@ -9,6 +9,10 @@ class Controller
 public:
 
     Controller();
+    Controller(bool&, string&, int&);
+    bool logging;
+    string model_typ;
+    int n_filt;
 
     void update_filters(double);
     void boot_filter(int);
