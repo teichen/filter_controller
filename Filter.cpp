@@ -10,12 +10,18 @@ void Filter::init_model(Model& model)
 {
     n = model.n_states;
 
+    RungeKutta propagator;
+
     mem_test = false;
     initarrays();
 }
 
 void Filter::propagate_update(double t)
 {
+    /* propagate the prior estimate (mean and covariance of a Normal distriution)
+       update the posterior estimate (mean and covariance of a Normal distribution)
+    */
+    propagator.propagate(t0, tf, dt, rate);
 }
 
 void Filter::initarrays()

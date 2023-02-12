@@ -3,6 +3,7 @@
 #define _FILTER
 
 #include "Model.h"
+#include "RungeKutta.h"
 
 #include <iostream>
 
