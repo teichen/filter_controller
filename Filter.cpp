@@ -4,7 +4,11 @@ using namespace std;
 
 Filter::Filter()
 {
-    n_states = 4;
+}
+
+void Filter::init_model(Model& model)
+{
+    n = model.n_states;
 
     mem_test = false;
     initarrays();
@@ -16,8 +20,8 @@ void Filter::propagate_update(double t)
 
 void Filter::initarrays()
 {
-    x_prior = (double*) calloc (n_states, sizeof(double));
-    x_post  = (double*) calloc (n_states, sizeof(double));
+    x_prior = (double*) calloc (n, sizeof(double));
+    x_post  = (double*) calloc (n, sizeof(double));
 
     mem_test = true;
 }

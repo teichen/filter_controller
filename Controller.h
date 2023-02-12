@@ -2,6 +2,12 @@
 #ifndef _CONTROLLER
 #define _CONTROLLER
 
+#include "HarmonicModel.h"
+#include "VanderPolModel.h"
+#include "Filter.h"
+
+#include <iostream>
+
 using namespace std;
 
 class Controller
@@ -13,6 +19,10 @@ public:
     bool logging;
     string model_typ;
     int n_filt;
+
+    Filter filter;
+    HarmonicModel harmonic_model;
+    VanderPolModel vanderpol_model;
 
     void update_filters(double);
     void boot_filter(int);

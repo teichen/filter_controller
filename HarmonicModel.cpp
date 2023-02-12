@@ -4,9 +4,10 @@ using namespace std;
 
 HarmonicModel::HarmonicModel()
 {
+    n_states = 4;
 }
 
-void HarmonicModel::rate(double x[4])
+void HarmonicModel::rate(double x)
 {
 }
 

@@ -2,15 +2,19 @@
 #ifndef _HARMONICMODEL
 #define _HARMONICMODEL
 
+#include "Model.h"
+
+#include <iostream>
+
 using namespace std;
 
-class HarmonicModel
+class HarmonicModel : public Model
 {
 public:
 
     HarmonicModel();
     
-    void rate(double[4]);
+    void rate(double);
 
     ~HarmonicModel();
 

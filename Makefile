@@ -2,17 +2,17 @@ SHELL = /bin/sh
 
 # make clean
 # make all
-# make corruption_simulation
+# make multifilter_run
 
 OBJS = main.o Controller.o Filter.o HarmonicModel.o Model.o RungeKutta.o VanderPolModel.o
-CFLAGS =
+CFLAGS = -g -O0
 CC = clang++
 INCLUDES = -I/usr/local/include
-LIBS = -L/usr/local/lib -lgsl -lgslcblas
+LIBS = -L/usr/local/lib -L/usr/local/Cellar/gperftools/2.10/lib -lgsl -lgslcblas -lprofiler
 
-all:corruption_simulation
+all:multifilter_run
 
-corruption_simulation:${OBJS}
+multifilter_run:${OBJS}
 	${CC} ${CFLAGS} ${INCLUDES} -o $@ ${OBJS} ${LIBS}
 
 clean:

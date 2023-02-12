@@ -2,15 +2,19 @@
 #ifndef _VANDERPOLMODEL
 #define _VANDERPOLMODEL
 
+#include "Model.h"
+
+#include <iostream>
+
 using namespace std;
 
-class VanderPolModel
+class VanderPolModel : public Model
 {
 public:
 
     VanderPolModel();
     
-    void rate(double[4]);
+    void rate(double);
     
     ~VanderPolModel();
 
