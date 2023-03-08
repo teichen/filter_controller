@@ -2,11 +2,41 @@
 
 using namespace std;
 
-RungeKutta::RungeKutta()
+RungeKutta::RungeKutta(Model& model)
 {
+    /* Args:
+                model (Model) : model class
+    */
+    n = model.n_states;
+
+    mem_test = false;
+    initarrays();
+
+    int i,j;
+
+    for (i=0; i<n; i++)
+    {
+        for (j=0; j<n; j++)
+        {
+            rate[i*n + j] = model.linearized_rate[i*n + j];
+        }
+    }
 }
 
-void RungeKutta::propagate(double t0, double tf, double dt, TODO rate, double* x_prior)
+void RungeKutta::displacement(double* x, double dt, double* k)
+{
+    int i,j;
+
+    for (i=0; i<n; i++)
+    {
+        for (j=0; j<n; j++)
+        {
+            k[i] += rate[i*n + j] * x[j] * dt;
+        }
+    }
+}
+
+void RungeKutta::propagate(double t0, double tf, double dt, double* x_prior)
 {
     /* classic Runge-Kutta method (RK4)
        dy/dt = f(t,y) ; y(t0) = x_prior
@@ -16,25 +46,43 @@ void RungeKutta::propagate(double t0, double tf, double dt, TODO rate, double* x
                 t0 (double)     : initial time
                 tf (double)     : final time
                 dt (double)     : time interval step size
-                rate
                 x_prior (array) : mean prior estimate
     */
     double t;
 
+    double k1[n], k2[n], k3[n], k4[n];
+
+    int i;
+
     t = t0;
     while (t < tf)
     {
-        t += dt
-        k1 = rate(x_prior);
-        k2 = rate(x_prior + 0.5 * dt * k1);
-        k3 = rate(x_prior + 0.5 * dt * k2);
-        k4 = rate(x_prior + dt * k3);
+        t += dt;
 
-        x_prior += (1.0 / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4);
+        displacement(x_prior, dt, k1);
+        displacement(x_prior + 0.5 * dt * k1, dt, k2);
+        displacement(x_prior + 0.5 * dt * k2, dt, k3);
+        displacement(x_prior + dt * k3, dt, k4);
+
+        for (i=0; i<model.n; i++)
+        {
+            x_prior[i] += (1.0 / 6.0) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+        }
         t0 = t
     }
 }
 
+void RungeKutta::initarrays()
+{
+    rate = (double*) calloc (n*n, sizeof(double));
+
+    mem_test = true;
+}
+
 RungeKutta::~RungeKutta()
 {
+    if(mem_test==true)
+    {
+    delete [] rate;
+    }
 }

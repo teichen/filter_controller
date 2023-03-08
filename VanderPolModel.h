@@ -14,8 +14,12 @@ public:
 
     VanderPolModel();
     
-    void rate(double);
-    
+    void rate(double*, double*);
+
+    void initarrays();
+
+    double* linearized_rate;
+  
     ~VanderPolModel();
 
 private:

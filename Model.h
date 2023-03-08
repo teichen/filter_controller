@@ -14,6 +14,8 @@ public:
     
     int n_states;
 
+    double* linearized_rate;
+
     ~Model();
 
 private:

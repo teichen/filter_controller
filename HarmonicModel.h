@@ -14,7 +14,11 @@ public:
 
     HarmonicModel();
     
-    void rate(double);
+    void rate(double*, double*);
+
+    void initarrays();
+
+    double* linearized_rate;
 
     ~HarmonicModel();
 
