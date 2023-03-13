@@ -21,9 +21,19 @@ public:
     int n;
     double* x_post;
     double* x_prior;
+    double* sig_post;
+    double* sig_prior;
+
+    double t0;
+
+    void initialize_state();
     void initarrays();
 
     void propagate_update(double);
+
+    void set_prior(double*, double*);
+    void set_posterior(double*, double*);
+    void update(double*);
 
     ~Filter();
 
