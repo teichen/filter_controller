@@ -18,8 +18,6 @@ public:
 
     void initarrays();
 
-    double* linearized_rate;
-  
     ~VanderPolModel();
 
 private:

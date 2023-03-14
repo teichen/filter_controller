@@ -13,8 +13,11 @@ public:
     Model();
     
     int n_states;
+    int n_inputs;
 
     double* linearized_rate;
+    double* linearized_jacobian;
+    double* linearized_laplacian;
 
     ~Model();
 
