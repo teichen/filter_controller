@@ -23,6 +23,7 @@ public:
     double* x_prior;
     double* sig_post;
     double* sig_prior;
+    double* jacobian_linearized;
 
     double t0;
 
