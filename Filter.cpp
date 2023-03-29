@@ -69,8 +69,10 @@ void Filter::update(double* x, double* inputs)
 
     double jac_sig[n_in * n];
     double jac_sig_T[n_in * n];
+    double sig_inputs[n_in * n_in];
 
-    gsl_matrix_view jac_sig_matrix = gsl_matrix_view_array(jac_sig, n_in, n);
+    gsl_matrix_view jac_sig_matrix    = gsl_matrix_view_array(jac_sig, n_in, n);
+    gsl_matrix_view sig_inputs_matrix = gsl_matrix_view_array(sig_inputs, n_in, n_in);
 
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, jacobian_matrix, sig_prior_matrix, 0.0, jac_sig_matrix);
 
@@ -83,11 +85,41 @@ void Filter::update(double* x, double* inputs)
         }
     }
 
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, jac_sig_matrix, jacobian_T_matrix, sig_inputs_matrix);
+
+    for (i=0; i<n_in; i++)
+    {
+        for (j=0; j<n_in; j++)
+        {
+            sig_inputs[i*n_in + j] = gsl_matrix_get(sig_inputs_matrix, i, j);
+        }
+    }
+
+    double inputs_noise[n_in * n_in];
+
+    for (i=0; i<n_in; i++)
+    {
+        for (j=0; j<n_in; j++)
+        {
+            inputs_noise[i*n_in + j] = sig_inputs[i*n_in + j] + noise[i*n_in + j];
+        }
+    }
+
+    gsl_matrix_view inputs_noise_matrix = gsl_matrix_view_array(inputs_noise, n_in, n_in);
+
+    gsl_matrix_view gain_matrix = gsl_matrix_view_array(gain, n_in, n);
+    double inputs_noise_inv[n_in * n_in];
+    gsl_matrix_view inputs_noise_inv_matrix = gsl_matrix_view_array(inputs_noise_inv, n_in, n_in);
+
+    // TODO: inputs_noise_inv_matrix from LU decomposition
+
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, jac_sig_T_matrix, inputs_noise_inv_matrix, gain_matrix);
+
     for (i=0; i<n_in; i++)
     {
         for (j=0; j<n; j++)
         {
-            gain[i * n + j] = jac_sig_T * inv(jac_sig * jacobian_T + noise);
+            gain[i * n + j] = gsl_matrix_get(gain_matrix, i, j);
         }
     }
 
