@@ -30,6 +30,17 @@ Controller::Controller(bool& logger, string& model_type, int& n_filters)
     }
 }
 
+void Controller::couple_filters_measurements()
+{
+    /* pair each filter with a measurement
+       based on the measurement frequency,
+       first filter processes regularizes the measurement
+       times and dampens the measurement noise for the highest
+       frequency measurement, the second filter the second highest
+       frequency measurement, and so on
+    */
+}
+
 void Controller::update_filters(double t)
 {
     /* extended Kalman filter update

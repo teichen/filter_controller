@@ -24,6 +24,7 @@ public:
     HarmonicModel harmonic_model;
     VanderPolModel vanderpol_model;
 
+    void couple_filters_measurements();
     void update_filters(double);
     void boot_filter(int);
     void shutdown_filter(int);
