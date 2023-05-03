@@ -1,0 +1,2 @@
+# DEPENDENCIES:
+PyMySQL==1.0.3
