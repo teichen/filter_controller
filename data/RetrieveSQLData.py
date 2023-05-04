@@ -9,3 +9,5 @@ class RetrieveSQLData:
         """
         pass
 
+    # TODO: write to disk
+
