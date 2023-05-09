@@ -3,4 +3,5 @@ clang
 libomp
 gsl
 
+mysql 5.7.17
 Docker for Mac 1.12.1, 2016-09-16
