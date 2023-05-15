@@ -3,5 +3,7 @@ clang
 libomp
 gsl
 
-mysql 5.7.17
+brew install mongodb-community@4.2
 Docker for Mac 1.12.1, 2016-09-16
+mysql 5.7.17
+sudo docker pull mysql/mysql-server:5.7.17

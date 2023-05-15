@@ -1,7 +1,10 @@
 #!/bin/bash
 
-python docker.py start
+python databases.py start
 
-# TODO
+# proof of principle:
+# load data into sql/mongo databases
+# read data from sql/mongo databases
+# write inputs to disk
 
-python docker.py stop
+python databases.py stop
