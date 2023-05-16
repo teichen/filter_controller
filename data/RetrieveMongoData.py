@@ -19,11 +19,17 @@ class RetrieveMongoData:
         db = mc[db_name][db_collection]
 
         # retrieve data
-        start_time = 
-        stop_time  = 
-        query = {'$or': ['start_time': {'$lte': start_time}, 'stop_time': {'$gte': stop_time}, ]}
-        results = {'input_name': 0, 'input_value': 0, 'input_time': 0}
-        cursor = db.find(query, results)
+        start_time = datetime(2005, 5, 29, 0, 0)
+        stop_time  = datetime(2005, 6, 2, 0, 0)
+        query = {'input_time': {'$gte': start_time, '$lt': stop_time}}
+        cursor = db.find(query)
+
+        inputs = {}
+        inputs['test_name'] = {}
+
+        for doc in cursor:
+            input_time = doc['input_time']
+            inputs['test_name'][input_time] = doc['input_value']
 
         # write to disk
 

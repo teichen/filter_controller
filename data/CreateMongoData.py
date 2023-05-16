@@ -14,8 +14,8 @@ class CreateMongoData:
         config.read('inputs.ini')
 
         url = str(config['mongo']['address'])
-        db_name = str(config['mongo']['name'])
-        db_collection = str(config['mongo']['collection'])
+        db_name = str(config['mongo']['db_name'])
+        db_collection = str(config['mongo']['db_collection'])
 
         # start a mongo session
         mc = MongoClient(url, uuidRepresentation='pythonLegacy')

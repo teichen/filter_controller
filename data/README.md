@@ -11,3 +11,10 @@ mysql -u root --password -h 127.0.0.1 -P 3306
 # docker mysql container setup:
 sudo docker pull mysql/mysql-server:5.7.17
 
+# mongo setup:
+append to PATH in ~/.bash_profile
+export PATH="/usr/local/opt/mongodb-community@4.2/bin:$PATH"
+
+# to check database services:
+docker ps
+brew services list
