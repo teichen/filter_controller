@@ -1,8 +1,10 @@
+import abc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column
 from sqlalchemy import String
+from sqlalchemy import Integer
 import configparser
 from datetime import datetime, timedelta
 import pandas as pd
@@ -37,11 +39,14 @@ class Networks(Base):
 class CreateSQLData:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self):
+    def __init__(self, config_path):
         """ base class for SQL Data (Network Definitions) Creation
+        
+        Args:
+            config_path (str): path to configuration file
         """
         config = configparser.ConfigParser()
-        config.read('inputs.ini')
+        config.read(config_path)
 
         sql_address = str(config['sql']['address'])
         sql_user    = getpass.getuser()
@@ -55,28 +60,29 @@ class CreateSQLData:
         # start a sql session
         engine  = create_engine(url, pool_size=30, pool_recycle=3600)
         session_interface = sessionmaker(bind=engine)
-        session = scoped_session(session_interface)()
+        self.session = scoped_session(session_interface)()
 
-        session.commit() # persist permanently to disk
+        self.session.commit() # persist permanently to disk
 
-        # create network definitions (networks of measurements)
-
+    def add_networks(self):
+        """ create network definitions (networks of measurements)
+        """
         networks = []
 
         network_name  = 'test_name'
 
-        networks.append(single_network(network_name))
+        networks.append(self.single_network(network_name))
 
         # add data to sql session
+        self.session.add_all(networks)
+        self.session.commit()
 
-        session.add_all(networks)
-        session.commit()
+    def close_session(self):
+        """ close SQL session
+        """
+        self.session.close()
 
-        # close sql session
-
-        session.close()
-
-    def single_network(network_name):
+    def single_network(self, network_name):
         """ create network definition class
 
         Args:
