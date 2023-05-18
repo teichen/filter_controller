@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import pandas as pd
 import uuid
 import getpass
+import urllib
 
 Base = declarative_base()
 
@@ -54,6 +55,8 @@ class CreateSQLData:
         sql_db      = str(config['sql']['db_name'])
         sql_port    = str(config['sql']['port'])
         
+        sql_pswd = urllib.parse.quote(sql_pswd.encode('utf8'))
+
         url = 'mysql+pymysql://' + sql_user + ':' + sql_pswd + '@' + sql_address +\
                 ':' + sql_port + '/' + sql_db + '?charset=utf8mb4&binary_prefix=true'
 
