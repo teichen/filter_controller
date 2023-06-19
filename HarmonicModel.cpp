@@ -30,9 +30,9 @@ HarmonicModel::HarmonicModel()
     // linearized jacobian of input estimates
     for (i=0; i<n_inputs; i++)
     {
-        for (j=0; j<n; j++)
+        for (j=0; j<n_states; j++)
         {
-            linearized_jacobian[i*n + j] = 
+            linearized_jacobian[i*n_states + j] = 
         }
     }
 }

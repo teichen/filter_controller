@@ -13,7 +13,9 @@ class VanderPolModel : public Model
 public:
 
     VanderPolModel();
-    
+
+    bool mem_test;
+
     void rate(double*, double*);
 
     void initarrays();

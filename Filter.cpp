@@ -72,26 +72,29 @@ void Filter::update(double* x, double* inputs)
     double sig_inputs[n_in * n_in];
 
     gsl_matrix_view jac_sig_matrix    = gsl_matrix_view_array(jac_sig, n_in, n);
+    gsl_matrix_view jac_sig_T_matrix    = gsl_matrix_view_array(jac_sig_T, n, n_in);
     gsl_matrix_view sig_inputs_matrix = gsl_matrix_view_array(sig_inputs, n_in, n_in);
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, jacobian_matrix, sig_prior_matrix, 0.0, jac_sig_matrix);
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &jacobian_matrix.matrix, 
+            &sig_prior_matrix.matrix, 0.0, &jac_sig_matrix.matrix);
 
     for (i=0; i<n_in; i++)
     {
         for (j=0; j<n; j++)
         {
-            jac_sig[i * n + j]      = gsl_matrix_get(jac_sig_matrix, i, j);
+            jac_sig[i * n + j]      = gsl_matrix_get(&jac_sig_matrix.matrix, i, j);
             jac_sig_T[j * n_in + i] = jac_sig[i * n + j];
         }
     }
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, jac_sig_matrix, jacobian_T_matrix, sig_inputs_matrix);
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &jac_sig_matrix.matrix, 
+            &jacobian_T_matrix.matrix, 0.0, &sig_inputs_matrix.matrix);
 
     for (i=0; i<n_in; i++)
     {
         for (j=0; j<n_in; j++)
         {
-            sig_inputs[i*n_in + j] = gsl_matrix_get(sig_inputs_matrix, i, j);
+            sig_inputs[i*n_in + j] = gsl_matrix_get(&sig_inputs_matrix.matrix, i, j);
         }
     }
 
@@ -113,13 +116,14 @@ void Filter::update(double* x, double* inputs)
 
     // TODO: inputs_noise_inv_matrix from LU decomposition
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, jac_sig_T_matrix, inputs_noise_inv_matrix, gain_matrix);
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &jac_sig_T_matrix.matrix, 
+            &inputs_noise_inv_matrix.matrix, 0.0, &gain_matrix.matrix);
 
     for (i=0; i<n_in; i++)
     {
         for (j=0; j<n; j++)
         {
-            gain[i * n + j] = gsl_matrix_get(gain_matrix, i, j);
+            gain[i * n + j] = gsl_matrix_get(&gain_matrix.matrix, i, j);
         }
     }
 
@@ -142,11 +146,12 @@ void Filter::update(double* x, double* inputs)
     gsl_matrix_view residuals_matrix = gsl_matrix_view_array(residuals, n_in, 1);
     gsl_matrix_view dx_matrix        = gsl_matrix_view_array(dx, n, 1);
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, gain_T_matrix, residuals_matrix, 0.0, dx_matrix);
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &gain_T_matrix.matrix, 
+            &residuals_matrix.matrix, 0.0, &dx_matrix.matrix);
 
     for (i=0; i<n; i++)
     {
-        dx[i]     = gsl_matrix_get(dx_matrix, i, 0);
+        dx[i]     = gsl_matrix_get(&dx_matrix.matrix, i, 0);
         x_post[i] = x_prior[i] + dx[i];
     }
 }
