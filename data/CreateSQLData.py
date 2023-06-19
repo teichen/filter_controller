@@ -1,5 +1,6 @@
 import abc
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, Table, text
+from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column
@@ -20,7 +21,7 @@ class Networks(Base):
     __tablename__ = 'Networks'
 
     ID = Column(Integer, primary_key=True)
-    NETWORK_ID = Column(String, nullable=False)
+    NETWORK_ID = Column(String(16), nullable=False)
 
     def __init__(self, NETWORK_ID):
         """
@@ -50,7 +51,7 @@ class CreateSQLData:
         config.read(config_path)
 
         sql_address = str(config['sql']['address'])
-        sql_user    = getpass.getuser()
+        sql_user    = 'root' # getpass.getuser()
         sql_pswd    = getpass.getpass(prompt='password: ')
         sql_db      = str(config['sql']['db_name'])
         sql_port    = str(config['sql']['port'])
@@ -62,6 +63,20 @@ class CreateSQLData:
 
         # start a sql session
         engine  = create_engine(url, pool_size=30, pool_recycle=3600)
+        if not database_exists(engine.url):
+            create_database(engine.url)
+
+        # create Networks table
+        metadata_obj = MetaData()
+        profile = Table(
+                'Networks',
+                metadata_obj,
+                Column('ID', Integer, primary_key=True),
+                Column('NETWORK_ID', String(16), nullable=False),
+                )
+
+        metadata_obj.create_all(engine)
+
         session_interface = sessionmaker(bind=engine)
         self.session = scoped_session(session_interface)()
 

@@ -11,3 +11,7 @@ class RetrieveSQLData:
 
     # TODO: write to disk
 
+    # TODO: delete NETWORKS SQL table and database
+    # with session_scope(sql_data_uri) as session:
+    #       session.query('Networks').delete('fetch')
+    #       session.commit()
