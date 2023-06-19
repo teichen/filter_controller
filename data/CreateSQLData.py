@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column
 from sqlalchemy import String
 from sqlalchemy import Integer
+from contextlib import contextmanager
 import configparser
 from datetime import datetime, timedelta
 import pandas as pd
@@ -62,25 +63,42 @@ class CreateSQLData:
                 ':' + sql_port + '/' + sql_db + '?charset=utf8mb4&binary_prefix=true'
 
         # start a sql session
-        engine  = create_engine(url, pool_size=30, pool_recycle=3600)
-        if not database_exists(engine.url):
-            create_database(engine.url)
+        self.engine  = create_engine(url, pool_size=30, pool_recycle=3600)
+        if not database_exists(self.engine.url):
+            create_database(self.engine.url)
 
         # create Networks table
-        metadata_obj = MetaData()
+        self.metadata_obj = MetaData()
         profile = Table(
                 'Networks',
-                metadata_obj,
+                self.metadata_obj,
                 Column('ID', Integer, primary_key=True),
                 Column('NETWORK_ID', String(16), nullable=False),
                 )
 
-        metadata_obj.create_all(engine)
+        self.metadata_obj.create_all(self.engine)
 
-        session_interface = sessionmaker(bind=engine)
+        session_interface = sessionmaker(bind=self.engine)
         self.session = scoped_session(session_interface)()
 
         self.session.commit() # persist permanently to disk
+
+    def delete_tables(self):
+        """
+        """
+        self.metadata_obj.drop_all(self.engine)
+
+    @contextmanager
+    def session_scope(self):
+        session = self.session
+        try:
+            yield session
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
 
     def add_networks(self):
         """ create network definitions (networks of measurements)
