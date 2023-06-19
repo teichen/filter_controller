@@ -18,6 +18,8 @@ public:
     Filter();
     void init_model(Model&);
 
+    RungeKutta propagator;
+
     int n;
     int n_in;
     double* x_post;

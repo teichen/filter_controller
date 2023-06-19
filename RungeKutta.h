@@ -12,7 +12,8 @@ class RungeKutta
 {
 public:
 
-    RungeKutta(Model&);
+    RungeKutta();
+    void init_model(Model&);
 
     int n;
     void initarrays();

@@ -14,7 +14,7 @@ void Filter::init_model(Model& model)
     jacobian  = model.linearized_jacobian;
     laplacian = model.linearized_laplacian;
 
-    RungeKutta propagator(model);
+    propagator.init_model(model);
 
     mem_test = false;
     initarrays();

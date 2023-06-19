@@ -2,7 +2,11 @@
 
 using namespace std;
 
-RungeKutta::RungeKutta(Model& model)
+RungeKutta::RungeKutta()
+{
+}
+
+void RungeKutta::init_model(Model& model)
 {
     /* Args:
                 model (Model) : model class
