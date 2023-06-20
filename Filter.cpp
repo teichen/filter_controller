@@ -158,6 +158,16 @@ void Filter::update(double* x, double* inputs)
 
 void Filter::calc_estimates(double* x, double* estimates)
 {
+    // linearized jacobian to back out linearized estimates
+    
+    int i,j;
+    for (i=0; i<n_in; i++)
+    {
+        for (j=0; j<n; j++)
+        {
+            estimates[i] = jacobian[i*n + j] * x[j];
+        }
+    }
 }
 
 void Filter::set_prior(double* x, double* sigma)

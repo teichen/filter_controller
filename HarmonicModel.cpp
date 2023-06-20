@@ -78,7 +78,7 @@ void HarmonicModel::map_inputs_states(double* x, double* f)
     for (i=0; i<n_inputs; i++)
     {
         // TODO: placeholder linear mapping
-        f[i*n_states + i] = 1.0;
+        f[i*n_states + i] = x[i];
     }
 }
 
