@@ -28,13 +28,19 @@ VanderPolModel::VanderPolModel()
     }
 
     // linearized jacobian of input estimates
+    // TODO: generalize jacobian, using linearized placeholder
     for (i=0; i<n_inputs; i++)
     {
-        for (j=0; j<n; j++)
+        for (j=0; j<n_states; j++)
         {
-            linearized_jacobian[i*n + j] = 
+            linearized_jacobian[i*n_states + j] = 0;
         }
     }
+    for (i=0; i<n_inputs; i++)
+    {
+        linearized_jacobian[i*n_states + i] = 1.0;
+    }
+
 }
 
 void VanderPolModel::rate(double* x, double* r)
@@ -56,9 +62,30 @@ void VanderPolModel::rate(double* x, double* r)
     }
 }
 
+void VanderPolModel::map_inputs_states(double* x, double* f)
+{
+    /* map of states onto inputs
+    */
+    int i,j;
+
+    for (i=0; i<n_inputs; i++)
+    {
+        for (j=0; j<n_states; j++)
+        {
+            f[i*n_states + j] = 0;
+        }
+    }
+    for (i=0; i<n_inputs; i++)
+    {
+        // TODO: placeholder linear mapping
+        f[i*n_states + i] = 1.0;
+    }
+}
+
 void VanderPolModel::initarrays()
 {
     linearized_rate = (double*) calloc (n_states * n_states, sizeof(double));
+    linearized_jacobian = (double*) calloc (n_inputs * n_states, sizeof(double));
 
     mem_test = true;
 }
@@ -68,6 +95,7 @@ VanderPolModel::~VanderPolModel()
     if(mem_test==true)
     {
     delete [] linearized_rate;
+    delete [] linearized_jacobian;
     }
 }
 

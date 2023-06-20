@@ -17,8 +17,7 @@ public:
     bool mem_test;
 
     void rate(double*, double*);
-
-    int n;
+    void map_inputs_states(double*, double*);
 
     void initarrays();
 

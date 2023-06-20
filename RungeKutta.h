@@ -15,6 +15,8 @@ public:
     RungeKutta();
     void init_model(Model&);
 
+    bool mem_test;
+
     int n;
     void initarrays();
 

@@ -56,6 +56,8 @@ void RungeKutta::propagate(double t0, double tf, double dt, double* x_prior)
 
     double k1[n], k2[n], k3[n], k4[n];
 
+    double x_transient[n];
+
     int i;
 
     t = t0;
@@ -64,15 +66,27 @@ void RungeKutta::propagate(double t0, double tf, double dt, double* x_prior)
         t += dt;
 
         displacement(x_prior, dt, k1);
-        displacement(x_prior + 0.5 * dt * k1, dt, k2);
-        displacement(x_prior + 0.5 * dt * k2, dt, k3);
-        displacement(x_prior + dt * k3, dt, k4);
+        for (i=0; i<n; i++)
+        {
+            x_transient[i] = x_prior[i] + 0.5 * dt * k1[i];
+        }
+        displacement(x_transient, dt, k2);
+        for (i=0; i<n; i++)
+        {
+            x_transient[i] = x_prior[i] + 0.5 * dt * k2[i];
+        }
+        displacement(x_transient, dt, k3);
+        for (i=0; i<n; i++)
+        {
+            x_transient[i] = x_prior[i] + dt * k3[i];
+        }
+        displacement(x_transient, dt, k4);
 
-        for (i=0; i<model.n; i++)
+        for (i=0; i<n; i++)
         {
             x_prior[i] += (1.0 / 6.0) * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
         }
-        t0 = t
+        t0 = t;
     }
 }
 
