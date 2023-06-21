@@ -4,11 +4,11 @@ SHELL = /bin/sh
 # make controller_test
 # make clean
 
-OBJS_CONTROLLER_TEST = controller_test.o ../Controller.o
+OBJS_CONTROLLER_TEST = controller_test.o ../Controller.o ../Filter.o ../HarmonicModel.o ../VanderPolModel.o ../Model.o ../RungeKutta.o
 CFLAGS = -g -O0
 CC = clang++
 INCLUDES =
-LIBS = -L/usr/local/lib -L/usr/local/Cellar/gperftools/2.10/lib -lprofiler
+LIBS = -L/usr/local/lib -L/usr/local/Cellar/gperftools/2.10/lib -lgsl -lgslcblas -lprofiler
 
 all:controller_test
 
