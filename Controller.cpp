@@ -20,13 +20,17 @@ Controller::Controller(bool& logger, string& model_type, int& n_filters)
     model_typ = model_type;
     n_filt    = n_filters;
 
-    if(model_typ == "HarmonicModel")
+    int i;
+    for (i=0; i<n_filt; i++)
     {
-        filter.init_model(harmonic_model);
-    }
-    else if(model_typ == "VanderPolModel")
-    {
-        filter.init_model(vanderpol_model);
+        if(model_typ == "HarmonicModel")
+        {
+            filters[i].init_model(harmonic_model);
+        }
+        else if(model_typ == "VanderPolModel")
+        {
+            filters[i].init_model(vanderpol_model);
+        }
     }
 }
 

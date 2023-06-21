@@ -20,7 +20,7 @@ public:
     string model_typ;
     int n_filt;
 
-    Filter filter;
+    Filter filters[10]; // TODO: configurable upper bound on n_filt
     HarmonicModel harmonic_model;
     VanderPolModel vanderpol_model;
 
