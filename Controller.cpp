@@ -67,12 +67,14 @@ void Controller::boot_filter(int idx_filter)
 {
     /* boot an individual filter instance
     */
+    filter_state[idx_filter] = 1;
 }
 
 void Controller::shutdown_filter(int idx_filter)
 {
     /* shutdown an individual filter instance
     */
+    filter_state[idx_filter] = 0;
 }
 
 void Controller::initarrays()
