@@ -20,12 +20,17 @@ public:
     string model_typ;
     int n_filt;
 
+    bool mem_test;
+    void initarrays();
+
+    int* filter_state;
+
     Filter filters[10]; // TODO: configurable upper bound on n_filt
     HarmonicModel harmonic_model;
     VanderPolModel vanderpol_model;
 
     void couple_filters_measurements();
-    void update_filters(double);
+    void update_filters(double, double*);
     void boot_filter(int);
     void shutdown_filter(int);
 
