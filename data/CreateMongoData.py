@@ -8,11 +8,11 @@ from pymongo import MongoClient
 class CreateMongoData:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self):
+    def __init__(self, config_path):
         """ base class for Mongo Data (inputs) Creation
         """
         config = configparser.ConfigParser()
-        config.read('inputs.ini')
+        config.read(config_path)
 
         url = str(config['mongo']['address'])
         db_name = str(config['mongo']['db_name'])
@@ -20,7 +20,7 @@ class CreateMongoData:
 
         # start a mongo session
         mc = MongoClient(url, uuidRepresentation='pythonLegacy')
-        db = mc[db_name][db_collection]
+        self.db = mc[db_name][db_collection]
 
         # create input measurements
 
@@ -31,7 +31,7 @@ class CreateMongoData:
         inputs = {'input_name': input_name, 'input_value': input_value, 'input_time': input_time}
 
         # add data to mongo session
-        db.insert_one(inputs)
+        self.db.insert_one(inputs)
         
         # close mongo session
 
