@@ -11,6 +11,8 @@ python data/CreateMongoData.py
 # i.e. python data/RetrieveMongoData.py t0 t1
 python data/RetrieveMongoData.py
 
+./multifilter_run 0 HarmonicModel 4
+ 
 # TODO: run the multi-filter controller for this time period [t0, t1]
 
 python databases.py stop

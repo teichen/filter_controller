@@ -5,6 +5,7 @@ import unittest
 
 from sqlalchemy import text
 from CreateSQLData import CreateSQLData, Networks
+from RetrieveSQLData import RetrieveSQLData
 
 config_path = '../inputs.ini'
 

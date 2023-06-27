@@ -4,6 +4,7 @@ sys.path.insert(1, '../')
 import unittest
 from sqlalchemy import text
 from CreateMongoData import CreateMongoData
+from RetrieveMongoData import RetrieveMongoData
 from datetime import datetime
 
 config_path = '../inputs.ini'
