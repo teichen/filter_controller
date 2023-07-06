@@ -1,8 +1,4 @@
-import sys
-sys.path.insert(1, '../')
-
 import unittest
-
 from sqlalchemy import text
 from CreateSQLData import CreateSQLData, Networks
 from RetrieveSQLData import RetrieveSQLData
@@ -11,12 +7,25 @@ config_path = '../inputs.ini'
 
 class SQLTest(unittest.TestCase):
 
-    sql_db = CreateSQLData(config_path)
-    
-    def test_sql(self):
-        self.sql_db.add_networks()
+    def setUp(self):
+        creator   = CreateSQLData(config_path)
+        retriever = RetrieveSQLData(config_path)
 
-        with self.sql_db.session_scope() as session:
+        creator.add_networks()
+
+    def tearDown(self):
+        # clear table
+        self.creator.delete_tables()
+
+    def test_retrieve_sql_data(self):
+        """ test the retrieval of a test Network in the Networks table
+        """
+        pass
+
+    def test_create_sql_data(self):
+        """ test the creation of a test Network in the Networks table
+        """
+        with self.creator.session_scope() as session:
             name = 'test_name'
             networks = session.query(Networks).filter_by(NETWORK_ID=name)
             n_networks = 0
@@ -25,8 +34,5 @@ class SQLTest(unittest.TestCase):
                 assert str(network) == "<Networks('test_name')>"
             assert n_networks == 1
 
-        # clear table
-        self.sql_db.delete_tables()
-
 if __name__ == "__main__":
-    unittest.main()
+        unittest.main()

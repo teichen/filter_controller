@@ -1,5 +1,7 @@
-# mysql setup:
+# module setup:
+export PYTHONPATH='path/to/project'
 
+# mysql setup:
 add alias in ~/.bash_profile
 alias docker='/Applications/Docker.app/Contents/Resources/bin/docker'
 export PATH=$PATH:/usr/local/mysql/bin

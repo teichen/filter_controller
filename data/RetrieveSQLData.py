@@ -1,8 +1,11 @@
 import abc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+import configparser
+from contextlib import contextmanager
 from CreateSQLData import Networks
 import getpass
+import urllib
 
 class RetrieveSQLData:
     __metaclass__ = abc.ABCMeta
@@ -27,7 +30,6 @@ class RetrieveSQLData:
         self.url = 'mysql+pymysql://' + sql_user + ':' + sql_pswd + '@' + sql_address +\
                 ':' + sql_port + '/' + sql_db + '?charset=utf8mb4&binary_prefix=true'
 
-
     def get_data(self):
         """
         """
@@ -40,6 +42,7 @@ class RetrieveSQLData:
     def write_data(self):
         """
         """
+        pass
 
     def delete_networks(self):
         """

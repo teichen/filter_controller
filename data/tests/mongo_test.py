@@ -1,6 +1,3 @@
-import sys
-sys.path.insert(1, '../')
-
 import unittest
 from sqlalchemy import text
 from CreateMongoData import CreateMongoData
