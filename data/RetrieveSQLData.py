@@ -10,18 +10,18 @@ import urllib
 class RetrieveSQLData:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, config_path):
+    def __init__(self, config_paths):
         """ base class for SQL Data Retrieval
 
         Args:
-            config_path (str): path to configuration file
+            config_path (list): list of paths to configuration files
         """
         config = configparser.ConfigParser()
-        config.read(config_path)
+        config.read(config_paths)
 
         sql_address = str(config['sql']['address'])
         sql_user    = 'root' # getpass.getuser()
-        sql_pswd    = getpass.getpass(prompt='password: ')
+        sql_pswd    = str(config['sql']['password'])
         sql_db      = str(config['sql']['db_name'])
         sql_port    = str(config['sql']['port'])
         
@@ -30,14 +30,20 @@ class RetrieveSQLData:
         self.url = 'mysql+pymysql://' + sql_user + ':' + sql_pswd + '@' + sql_address +\
                 ':' + sql_port + '/' + sql_db + '?charset=utf8mb4&binary_prefix=true'
 
+        self.engine  = create_engine(self.url, pool_size=30, pool_recycle=3600)
+        session_interface = sessionmaker(bind=self.engine)
+        self.session = scoped_session(session_interface)()
+
     def get_data(self):
         """
         """
         name = 'test_name'
-        networks = session.query(Networks).filter_by(NETWORK_ID=name)
+        networks = self.session.query(Networks).filter_by(NETWORK_ID=name)
         network_list = []
         for network in networks:
             network_list += [str(network)]
+
+        return network_list
 
     def write_data(self):
         """
@@ -47,8 +53,8 @@ class RetrieveSQLData:
     def delete_networks(self):
         """
         """
-        with session_scope(self.uri) as session:
-              session.query('Networks').delete('fetch')
+        with self.session_scope() as session:
+              session.query(Networks).delete('fetch')
               session.commit()
 
     @contextmanager
@@ -62,5 +68,10 @@ class RetrieveSQLData:
             raise
         finally:
             session.close()
+
+    def close_session(self):
+        """ close SQL session
+        """
+        self.session.close()
 
 

@@ -42,18 +42,18 @@ class Networks(Base):
 class CreateSQLData:
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, config_path):
+    def __init__(self, config_paths):
         """ base class for SQL Data (Network Definitions) Creation
         
         Args:
-            config_path (str): path to configuration file
+            config_paths (list): paths to configuration files
         """
         config = configparser.ConfigParser()
-        config.read(config_path)
+        config.read(config_paths)
 
         sql_address = str(config['sql']['address'])
         sql_user    = 'root' # getpass.getuser()
-        sql_pswd    = getpass.getpass(prompt='password: ')
+        sql_pswd    = str(config['sql']['password'])
         sql_db      = str(config['sql']['db_name'])
         sql_port    = str(config['sql']['port'])
         

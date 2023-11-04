@@ -4,11 +4,14 @@ from CreateMongoData import CreateMongoData
 from RetrieveMongoData import RetrieveMongoData
 from datetime import datetime
 
-config_path = '../inputs.ini'
+config_path = './inputs.ini'
 
 class MongoTest(unittest.TestCase):
+    def setUp(self):
+        self.mongo_db = CreateMongoData(config_path)
 
-    mongo_db = CreateMongoData(config_path)
+    def tearDown(self):
+        pass
 
     def test_mongo(self):
         # retrieve data
