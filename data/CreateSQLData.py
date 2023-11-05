@@ -16,10 +16,10 @@ import urllib
 
 Base = declarative_base()
 
-class Networks(Base):
-    """ SQL table class for input (measurement) network object
+class Devices(Base):
+    """ SQL table class for input (measurement) device object
     """
-    __tablename__ = 'Networks'
+    __tablename__ = 'Devices'
 
     ID = Column(Integer, primary_key=True)
     NETWORK_ID = Column(String(16), nullable=False)
@@ -30,9 +30,9 @@ class Networks(Base):
         self.NETWORK_ID = NETWORK_ID
 
     def __repr__(self):
-        """ official string representation of Networks class
+        """ official string representation of Devices class
         """
-        return "<Networks('%s')>" % (self.NETWORK_ID)
+        return "<Devices('%s')>" % (self.NETWORK_ID)
 
     def __hash__(self):
         """
@@ -43,7 +43,7 @@ class CreateSQLData:
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, config_paths):
-        """ base class for SQL Data (Network Definitions) Creation
+        """ base class for SQL Data (Device Definitions) Creation
         
         Args:
             config_paths (list): paths to configuration files
@@ -67,10 +67,10 @@ class CreateSQLData:
         if not database_exists(self.engine.url):
             create_database(self.engine.url)
 
-        # create Networks table
+        # create Devices table
         self.metadata_obj = MetaData()
         profile = Table(
-                'Networks',
+                'Devices',
                 self.metadata_obj,
                 Column('ID', Integer, primary_key=True),
                 Column('NETWORK_ID', String(16), nullable=False),
@@ -100,17 +100,17 @@ class CreateSQLData:
         finally:
             session.close()
 
-    def add_networks(self):
-        """ create network definitions (networks of measurements)
+    def add_devices(self):
+        """ create device definitions (devices of measurements)
         """
-        networks = []
+        devices = []
 
-        network_name  = 'test_name'
+        device_name  = 'test_name'
 
-        networks.append(self.single_network(network_name))
+        devices.append(self.single_device(device_name))
 
         # add data to sql session
-        self.session.add_all(networks)
+        self.session.add_all(devices)
         self.session.commit()
 
     def close_session(self):
@@ -118,16 +118,16 @@ class CreateSQLData:
         """
         self.session.close()
 
-    def single_network(self, network_name):
-        """ create network definition class
+    def single_device(self, device_name):
+        """ create device definition class
 
         Args:
-            network_name (str): measurement network name
+            device_name (str): measurement device name
 
         Returns:
         """
-        network_row = Networks(network_name)
+        device_row = Devices(device_name)
 
-        return network_row
+        return device_row
 
 

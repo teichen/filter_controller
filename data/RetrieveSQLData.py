@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import configparser
 from contextlib import contextmanager
-from CreateSQLData import Networks
+from CreateSQLData import Devices
 import getpass
 import urllib
 
@@ -38,23 +38,23 @@ class RetrieveSQLData:
         """
         """
         name = 'test_name'
-        networks = self.session.query(Networks).filter_by(NETWORK_ID=name)
-        network_list = []
-        for network in networks:
-            network_list += [str(network)]
+        devices = self.session.query(Devices).filter_by(NETWORK_ID=name)
+        device_list = []
+        for device in devices:
+            device_list += [str(device)]
 
-        return network_list
+        return device_list
 
     def write_data(self):
         """
         """
         pass
 
-    def delete_networks(self):
+    def delete_devices(self):
         """
         """
         with self.session_scope() as session:
-              session.query(Networks).delete('fetch')
+              session.query(Devices).delete('fetch')
               session.commit()
 
     @contextmanager

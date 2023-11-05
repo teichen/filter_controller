@@ -9,7 +9,7 @@ class CreateMongoData:
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, config_path):
-        """ base class for Mongo Data (inputs) Creation
+        """ base class for Mongo Data (measurements) Creation
         """
         config = configparser.ConfigParser()
         config.read(config_path)
@@ -19,20 +19,22 @@ class CreateMongoData:
         db_collection = str(config['mongo']['db_collection'])
 
         # start a mongo session
-        mc = MongoClient(url, uuidRepresentation='pythonLegacy')
-        self.db = mc[db_name][db_collection]
+        self.mc = MongoClient(url, uuidRepresentation='pythonLegacy')
+        self.db = self.mc[db_name][db_collection]
 
-        # create input measurements
+    def create_measurements(self, measurements):
+        """ create measurements
 
-        input_name  = 'test_name'
-        input_value = 1.0
-        input_time  = datetime(2005, 6, 1, 0, 0)
-
-        inputs = {'input_name': input_name, 'input_value': input_value, 'input_time': input_time}
-
+        Args:
+            measurements (list): list of measure dictionaries each containing measurement_name,
+                                 measurement_value, measurement_time
+        Returns: None
+        """
         # add data to mongo session
-        self.db.insert_one(inputs)
-        
-        # close mongo session
+        self.db.insert_many(measurements)
 
+    def close_session(self):
+        """ close mongo session
+        """
+        self.mc.close()
 
