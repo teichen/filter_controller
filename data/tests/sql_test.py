@@ -14,7 +14,9 @@ class SQLTest(unittest.TestCase):
         self.creator   = CreateSQLData(config_paths)
         self.retriever = RetrieveSQLData(config_paths)
 
-        self.creator.add_devices()
+        device_names  = ['test_name']
+
+        self.creator.add_devices(device_names)
 
     def tearDown(self):
         # clear table

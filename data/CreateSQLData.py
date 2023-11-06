@@ -100,14 +100,16 @@ class CreateSQLData:
         finally:
             session.close()
 
-    def add_devices(self):
+    def add_devices(self, device_names):
         """ create device definitions (devices of measurements)
+        
+        Args:
+            device_names (list): list of devices providing measurements to be filtered
         """
         devices = []
 
-        device_name  = 'test_name'
-
-        devices.append(self.single_device(device_name))
+        for device_name in device_names:
+            devices.append(self.single_device(device_name))
 
         # add data to sql session
         self.session.add_all(devices)
