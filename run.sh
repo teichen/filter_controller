@@ -3,17 +3,19 @@
 python databases.py start
 
 # proof of principle:
+
 # load data into sql/mongo databases
-python data/CreateMongoData.py
+python create_synthetic_data.py
 
-# read data from sql/mongo databases
+# read data from sql/mongo databases, write to disk
+python retrieve_synthetic_data.py
+
 # TODO: loop through time periods, write inputs to disk
-# i.e. python data/RetrieveMongoData.py t0 t1
-python data/RetrieveMongoData.py
 
-./multifilter_run 0 HarmonicModel 4
+# multifilter system will run on any data on disk
+logging=0
+n_filters=4
+./multifilter_run $logging HarmonicModel $n_filters
  
-# TODO: run the multi-filter controller for this time period [t0, t1]
-
 python databases.py stop
 
