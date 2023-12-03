@@ -34,11 +34,10 @@ class RetrieveSQLData:
         session_interface = sessionmaker(bind=self.engine)
         self.session = scoped_session(session_interface)()
 
-    def get_data(self):
+    def get_data(self, name, freq):
         """
         """
-        name = 'test_name'
-        devices = self.session.query(Devices).filter_by(NETWORK_ID=name)
+        devices = self.session.query(Devices).filter_by(CARRIER_ID=name, CARRIER_FREQ=freq)
         device_list = []
         for device in devices:
             device_list += [str(device)]

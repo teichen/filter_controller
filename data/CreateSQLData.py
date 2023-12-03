@@ -3,9 +3,7 @@ from sqlalchemy import create_engine, MetaData, Table, text
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column
-from sqlalchemy import String
-from sqlalchemy import Integer
+from sqlalchemy import Column, String, Integer, Numeric
 from contextlib import contextmanager
 import configparser
 from datetime import datetime, timedelta
@@ -17,27 +15,32 @@ import urllib
 Base = declarative_base()
 
 class Devices(Base):
-    """ SQL table class for input (measurement) device object
+    """ SQL table class for input (carrier wave) device object
     """
     __tablename__ = 'Devices'
 
     ID = Column(Integer, primary_key=True)
-    NETWORK_ID = Column(String(16), nullable=False)
+    CARRIER_ID = Column(String(16), nullable=False)
+    CARRIER_FREQ = Column(Numeric(6, 2), nullable=False)
 
-    def __init__(self, NETWORK_ID):
+    def __init__(self, CARRIER_ID, CARRIER_FREQ):
         """
+        Args:
+            CARRIER_ID: device name
+            CARRIER_FREQ: carrier wave frequency, either 1575.42 MHz or 1227.6 MHz
         """
-        self.NETWORK_ID = NETWORK_ID
+        self.CARRIER_ID = CARRIER_ID
+        self.CARRIER_FREQ = CARRIER_FREQ
 
     def __repr__(self):
         """ official string representation of Devices class
         """
-        return "<Devices('%s')>" % (self.NETWORK_ID)
+        return "<Devices('%s', %.2f)>" % (self.CARRIER_ID, self.CARRIER_FREQ)
 
     def __hash__(self):
         """
         """
-        return hash((self.NETWORK_ID))
+        return hash((self.CARRIER_ID, self.CARRIER_FREQ))
 
 class CreateSQLData:
     __metaclass__ = abc.ABCMeta
@@ -73,7 +76,8 @@ class CreateSQLData:
                 'Devices',
                 self.metadata_obj,
                 Column('ID', Integer, primary_key=True),
-                Column('NETWORK_ID', String(16), nullable=False),
+                Column('CARRIER_ID', String(16), nullable=False),
+                Column('CARRIER_FREQ', Numeric(6, 2), nullable=False)
                 )
 
         self.metadata_obj.create_all(self.engine)
@@ -100,16 +104,18 @@ class CreateSQLData:
         finally:
             session.close()
 
-    def add_devices(self, device_names):
-        """ create device definitions (devices of measurements)
+    def add_devices(self, input_devices):
+        """ create device definitions (carriers)
         
         Args:
-            device_names (list): list of devices providing measurements to be filtered
+            input_devices (dict): device carrier frequencies by name, measurements to be filtered
         """
         devices = []
 
-        for device_name in device_names:
-            devices.append(self.single_device(device_name))
+        carrier_names = list(input_devices.keys())
+        for carrier_name in carrier_names:
+            carrier_freq = input_devices[carrier_name]
+            devices.append(self.single_device(carrier_name, carrier_freq))
 
         # add data to sql session
         self.session.add_all(devices)
@@ -120,15 +126,16 @@ class CreateSQLData:
         """
         self.session.close()
 
-    def single_device(self, device_name):
+    def single_device(self, carrier_name, carrier_freq):
         """ create device definition class
 
         Args:
-            device_name (str): measurement device name
+            carrier_name (str): measurement device name
+            carrier_freq (float)
 
         Returns:
         """
-        device_row = Devices(device_name)
+        device_row = Devices(carrier_name, carrier_freq)
 
         return device_row
 
