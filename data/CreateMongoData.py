@@ -23,15 +23,21 @@ class CreateMongoData:
         self.db = self.mc[db_name][db_collection]
 
     def create_measurements(self, measurements):
-        """ create measurements
+        """ create measurements, GNSS carrier is phase-modulated, receiver compares timestamps
+            from multiple carriers
 
         Args:
-            measurements (list): list of measure dictionaries each containing measurement_name,
-                                 measurement_value, measurement_time
+            measurements (list): list of measure dictionaries each containing carrier_name (str),
+                                 carrier_phase (cycles), measurement_time (datetime.datetime)
         Returns: None
         """
         # add data to mongo session
         self.db.insert_many(measurements)
+
+    def delete_documents(self):
+        """
+        """
+        self.db.delete_many({}) # self.db.deleteMany({}) # self.db.remove()
 
     def close_session(self):
         """ close mongo session

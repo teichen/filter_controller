@@ -10,11 +10,11 @@ class MongoTest(unittest.TestCase):
     def setUp(self):
         self.creator = CreateMongoData(config_path)
 
-        measurement_name  = 'test_name'
-        measurement_value = 1.0
+        carrier_name  = 'test_name'
+        carrier_phase = 0.5 # cycles
         measurement_time  = datetime(2005, 6, 1, 0, 0)
 
-        measurements = [{'measurement_name': measurement_name, 'measurement_value': measurement_value, 
+        measurements = [{'carrier_name': carrier_name, 'carrier_phase': carrier_phase, 
                 'measurement_time': measurement_time}]
 
         self.creator.create_measurements(measurements)
@@ -22,6 +22,7 @@ class MongoTest(unittest.TestCase):
         self.retriever = RetrieveMongoData(config_path)
 
     def tearDown(self):
+        self.creator.delete_documents()
         self.creator.close_session()
 
     def test_create_mongo(self):
@@ -37,9 +38,9 @@ class MongoTest(unittest.TestCase):
 
         for doc in cursor:
             measurement_time = doc['measurement_time']
-            measurements['test_name'][measurement_time] = doc['measurement_value']
+            measurements['test_name'][measurement_time] = doc['carrier_phase']
 
-        test_dict = {'test_name': {datetime(2005, 6, 1, 0, 0): 1.0}}
+        test_dict = {'test_name': {datetime(2005, 6, 1, 0, 0): 0.5}}
 
         self.assertDictEqual(measurements, test_dict)
 
