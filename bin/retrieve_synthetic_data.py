@@ -24,7 +24,7 @@ def close_sessions(device_retriever, measurement_retriever):
 def retrieve_device_data(device_retriever):
     """
     """
-    device_list = device_retriever.get_data() # e.g. [<Devices('test_name')>]
+    device_list = device_retriever.get_data() # e.g. [<Devices('test_name', 1575.42)>]
 
 def retrieve_measurement_data(measurement_retriever):
     """ TODO

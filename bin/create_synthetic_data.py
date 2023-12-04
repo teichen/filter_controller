@@ -27,20 +27,20 @@ def close_sessions(device_creator, measurement_creator):
     measurement_creator.close_session()
 
 def create_device_data(device_creator):
-    """ create table of devices which provide measurements
+    """ create table of carriers which provide measurements
     """
-    device_names  = ['test_name']
+    devices = {'test_name': 1575.42}
 
-    device_creator.add_devices(device_names)
+    device_creator.add_devices(devices)
 
 def create_measurement_data(measurement_creator):
     """ create database of measurement data
     """
-    measurement_name  = 'test_name'
-    measurement_value = 1.0
+    carrier_name  = 'test_name'
+    carrier_phase = 0.5
     measurement_time  = datetime(2005, 6, 1, 0, 0)
 
-    measurements = [{'measurement_name': measurement_name, 'measurement_value': measurement_value, 
+    measurements = [{'carrier_name': carrier_name, 'carrier_phase': carrier_phase, 
             'measurement_time': measurement_time}]
 
     measurement_creator.create_measurements(measurements)
