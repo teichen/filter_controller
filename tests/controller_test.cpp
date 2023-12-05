@@ -12,16 +12,6 @@ int main()
     // unit testing with run time asserts
     // controller tests:
 
-    bool logging;
-    string model_type;
-    int n_filters;
-
-    logging    = 0;
-    model_type = "Harmonic";
-    n_filters  = 4;
-
-    Controller controller(logging, model_type, n_filters);
-
     // assert(TODO);
 
     // test 0 - single filter, moderate measurement noise
