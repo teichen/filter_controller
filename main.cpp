@@ -7,10 +7,10 @@ extern "C" {
 using namespace std;
 
 extern "C" {
-    void multifilter_run(void);
+    void run(double*, size_t n_inputs);
 }
 
-extern "C" void multifilter_run(void){
+extern "C" void run(double* inputs, size_t n_inputs){
     bool logging;
     string model_type;
     int n_filters;
