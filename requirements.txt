@@ -1,7 +1,10 @@
-# DEPENDENCIES:
+# C++ DEPENDENCIES:
 clang
 libomp
 gsl
+
+# Python DEPENDENCIES:
+memory-profiler==0.61.0
 
 brew install mongodb-community@4.2
 Docker for Mac 1.12.1, 2016-09-16
