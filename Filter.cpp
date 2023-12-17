@@ -5,6 +5,7 @@ using namespace std;
 
 Filter::Filter()
 {
+    mem_test = false;
 }
 
 void Filter::init_model(Model& model)
@@ -16,7 +17,6 @@ void Filter::init_model(Model& model)
 
     propagator.init_model(model);
 
-    mem_test = false;
     initarrays();
 
     initialize_state();
@@ -56,7 +56,7 @@ void Filter::update(double* x, double* inputs)
     {
         for (j=0; j<n_in; j++)
         {
-            jacobian_T[i*n + j] = jacobian[j*n + i];
+            jacobian_T[i * n_in + j] = jacobian[j * n + i];
         }
     }
 
@@ -94,7 +94,7 @@ void Filter::update(double* x, double* inputs)
     {
         for (j=0; j<n_in; j++)
         {
-            sig_inputs[i*n_in + j] = gsl_matrix_get(&sig_inputs_matrix.matrix, i, j);
+            sig_inputs[i * n_in + j] = gsl_matrix_get(&sig_inputs_matrix.matrix, i, j);
         }
     }
 
@@ -104,7 +104,7 @@ void Filter::update(double* x, double* inputs)
     {
         for (j=0; j<n_in; j++)
         {
-            inputs_noise[i*n_in + j] = sig_inputs[i*n_in + j] + noise[i*n_in + j];
+            inputs_noise[i * n_in + j] = sig_inputs[i * n_in + j] + noise[i * n_in + j];
         }
     }
 
@@ -131,7 +131,7 @@ void Filter::update(double* x, double* inputs)
     {
         for (j=0; j<n_in; j++)
         {
-            gain_T[i*n_in + j] = gain[j*n + i];
+            gain_T[i * n_in + j] = gain[j * n + i];
         }
     }
 

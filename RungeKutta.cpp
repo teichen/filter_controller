@@ -4,6 +4,7 @@ using namespace std;
 
 RungeKutta::RungeKutta()
 {
+    mem_test = false;
 }
 
 void RungeKutta::init_model(Model& model)
@@ -13,7 +14,6 @@ void RungeKutta::init_model(Model& model)
     */
     n = model.n_states;
 
-    mem_test = false;
     initarrays();
 
     int i,j;

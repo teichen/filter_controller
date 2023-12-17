@@ -40,11 +40,14 @@ extern "C" {
     n_filters  = 4;
 
     // TODO instantiate controller
-    // Controller multifilter_controller(logging, model_type, n_filters);
+    Controller multifilter_controller(logging, model_type, n_filters);
 
     // process data (measurement data subject to corruption noise)
     double t;
     double input_data_t[3];
+
+    // boot/pair inputs and filters
+    multifilter_controller.couple_filters_measurements();
 
     // test first time
     t = inputs[0];
@@ -52,8 +55,7 @@ extern "C" {
     input_data_t[1] = inputs[2];
     input_data_t[2] = inputs[3];
 
-    // TODO filter data
-    //multifilter_controller.update_filters(t, input_data_t);
+    multifilter_controller.update_filters(t, input_data_t);
     ProfilerStop();
     }
 }

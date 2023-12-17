@@ -5,7 +5,7 @@ using namespace std;
 HarmonicModel::HarmonicModel()
 {
     n_states = 4;
-    n_inputs = 2;
+    n_inputs = 3;
 
     mem_test = false;
     initarrays();
