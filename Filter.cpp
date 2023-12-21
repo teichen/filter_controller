@@ -203,13 +203,11 @@ void Filter::initialize_state()
     for (i=0; i<n; i++)
     {
         x_prior[i] = 0.0;
-    }
-    for (i=0; i<n; i++)
-    {
-        x_prior[i] = 0.0;
+        x_post[i]  = 0.0;
         for (j=0; j<n; j++)
         {
             sig_prior[i*n + j] = 0.0;
+            sig_post[i*n + j]  = 0.0;
         }
     }
 }

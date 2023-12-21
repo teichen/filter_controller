@@ -36,7 +36,7 @@ extern "C" {
     int n_filters;
 
     logging    = 0;
-    model_type = "Harmonic";
+    model_type = "HarmonicModel";
     n_filters  = 4;
 
     // TODO instantiate controller
@@ -62,5 +62,8 @@ extern "C" {
 
 int main()
 {
+    double inputs[4];
+    inputs[0] = 0; inputs[1] = 0; inputs[2] = 0; inputs[3] = 0;
+    run(inputs);
     return 0;
 }
