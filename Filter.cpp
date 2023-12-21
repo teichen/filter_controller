@@ -116,8 +116,8 @@ void Filter::update(double* x, double* inputs)
 
     // TODO: inputs_noise_inv_matrix from LU decomposition
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &jac_sig_T_matrix.matrix, 
-            &inputs_noise_inv_matrix.matrix, 0.0, &gain_matrix.matrix);
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &inputs_noise_inv_matrix.matrix,
+            &jac_sig_matrix.matrix, 0.0, &gain_matrix.matrix); 
 
     for (i=0; i<n_in; i++)
     {
