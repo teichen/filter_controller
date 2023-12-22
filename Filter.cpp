@@ -1,5 +1,6 @@
 #include "Filter.h"
 #include <gsl/gsl_blas.h>
+#include <gsl/gsl_linalg.h>
 
 using namespace std;
 
@@ -52,6 +53,11 @@ void Filter::update(double* x, double* inputs)
 
     int i,j;
 
+    for (i=0; i<n_in; i++)
+    {
+        noise[i * n_in + i] = 0.001;
+    }
+
     for (i=0; i<n; i++)
     {
         for (j=0; j<n_in; j++)
@@ -72,7 +78,7 @@ void Filter::update(double* x, double* inputs)
     double sig_inputs[n_in * n_in];
 
     gsl_matrix_view jac_sig_matrix    = gsl_matrix_view_array(jac_sig, n_in, n);
-    gsl_matrix_view jac_sig_T_matrix    = gsl_matrix_view_array(jac_sig_T, n, n_in);
+    gsl_matrix_view jac_sig_T_matrix  = gsl_matrix_view_array(jac_sig_T, n, n_in);
     gsl_matrix_view sig_inputs_matrix = gsl_matrix_view_array(sig_inputs, n_in, n_in);
 
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &jacobian_matrix.matrix, 
@@ -114,7 +120,11 @@ void Filter::update(double* x, double* inputs)
     double inputs_noise_inv[n_in * n_in];
     gsl_matrix_view inputs_noise_inv_matrix = gsl_matrix_view_array(inputs_noise_inv, n_in, n_in);
 
-    // TODO: inputs_noise_inv_matrix from LU decomposition
+    int s;
+    gsl_matrix * lu = gsl_matrix_alloc (n_in, n_in);
+    gsl_permutation * p = gsl_permutation_alloc (n_in);
+    gsl_linalg_LU_decomp(lu, p, &s);
+    gsl_linalg_LU_invert(lu, p, &inputs_noise_inv_matrix.matrix);
 
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &inputs_noise_inv_matrix.matrix,
             &jac_sig_matrix.matrix, 0.0, &gain_matrix.matrix); 
@@ -206,8 +216,16 @@ void Filter::initialize_state()
         x_post[i]  = 0.0;
         for (j=0; j<n; j++)
         {
-            sig_prior[i*n + j] = 0.0;
-            sig_post[i*n + j]  = 0.0;
+            if (i == j)
+            {
+                sig_prior[i*n + j] = 0.001;
+                sig_post[i*n + j]  = 0.001;
+            }
+            else
+            {
+                sig_prior[i*n + j] = 0.0;
+                sig_post[i*n + j]  = 0.0;
+            }
         }
     }
 }
@@ -218,8 +236,6 @@ void Filter::initarrays()
     x_post    = (double*) calloc (n, sizeof(double));
     sig_prior = (double*) calloc (n * n, sizeof(double));
     sig_post  = (double*) calloc (n * n, sizeof(double));
-    jacobian  = (double*) calloc(n * n_in, sizeof(double));
-    laplacian = (double*) calloc(n * n * n_in, sizeof(double));
 
     mem_test  = true;
 }
@@ -232,8 +248,6 @@ Filter::~Filter()
     delete [] x_post;
     delete [] sig_prior;
     delete [] sig_post;
-    delete [] jacobian;
-    delete [] laplacian;
 
     cout << "Deallocate Filter memory" << endl;
 

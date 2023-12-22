@@ -56,6 +56,7 @@ extern "C" {
     input_data_t[2] = inputs[3];
 
     multifilter_controller.update_filters(t, input_data_t);
+
     ProfilerStop();
     }
 }
@@ -63,7 +64,7 @@ extern "C" {
 int main()
 {
     double inputs[4];
-    inputs[0] = 0; inputs[1] = 0; inputs[2] = 0; inputs[3] = 0;
+    inputs[0] = 1.0; inputs[1] = 1.0; inputs[2] = 1.0; inputs[3] = 1.0;
     run(inputs);
     return 0;
 }
