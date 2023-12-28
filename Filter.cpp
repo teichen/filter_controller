@@ -121,10 +121,9 @@ void Filter::update(double* x, double* inputs)
     gsl_matrix_view inputs_noise_inv_matrix = gsl_matrix_view_array(inputs_noise_inv, n_in, n_in);
 
     int s;
-    gsl_matrix * lu = gsl_matrix_alloc (n_in, n_in);
     gsl_permutation * p = gsl_permutation_alloc (n_in);
-    gsl_linalg_LU_decomp(lu, p, &s);
-    gsl_linalg_LU_invert(lu, p, &inputs_noise_inv_matrix.matrix);
+    gsl_linalg_LU_decomp(&inputs_noise_matrix.matrix, p, &s);
+    gsl_linalg_LU_invert(&inputs_noise_matrix.matrix, p, &inputs_noise_inv_matrix.matrix);
 
     gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &inputs_noise_inv_matrix.matrix,
             &jac_sig_matrix.matrix, 0.0, &gain_matrix.matrix); 
