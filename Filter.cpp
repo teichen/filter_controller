@@ -81,8 +81,7 @@ void Filter::update(double* x, double* inputs)
     gsl_matrix_view jac_sig_T_matrix  = gsl_matrix_view_array(jac_sig_T, n, n_in);
     gsl_matrix_view sig_inputs_matrix = gsl_matrix_view_array(sig_inputs, n_in, n_in);
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &jacobian_matrix.matrix, 
-            &sig_prior_matrix.matrix, 0.0, &jac_sig_matrix.matrix);
+    matrix_mult(jacobian_matrix, sig_prior_matrix, jac_sig_matrix);
 
     for (i=0; i<n_in; i++)
     {
@@ -93,8 +92,7 @@ void Filter::update(double* x, double* inputs)
         }
     }
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &jac_sig_matrix.matrix, 
-            &jacobian_T_matrix.matrix, 0.0, &sig_inputs_matrix.matrix);
+    matrix_mult(jac_sig_matrix, jacobian_T_matrix, sig_inputs_matrix);
 
     for (i=0; i<n_in; i++)
     {
@@ -125,8 +123,9 @@ void Filter::update(double* x, double* inputs)
     gsl_linalg_LU_decomp(&inputs_noise_matrix.matrix, p, &s);
     gsl_linalg_LU_invert(&inputs_noise_matrix.matrix, p, &inputs_noise_inv_matrix.matrix);
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &inputs_noise_inv_matrix.matrix,
-            &jac_sig_matrix.matrix, 0.0, &gain_matrix.matrix); 
+    matrix_mult(inputs_noise_inv_matrix, jac_sig_matrix, gain_matrix);
+
+    gsl_permutation_free (p);
 
     for (i=0; i<n_in; i++)
     {
@@ -155,8 +154,7 @@ void Filter::update(double* x, double* inputs)
     gsl_matrix_view residuals_matrix = gsl_matrix_view_array(residuals, n_in, 1);
     gsl_matrix_view dx_matrix        = gsl_matrix_view_array(dx, n, 1);
 
-    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &gain_T_matrix.matrix, 
-            &residuals_matrix.matrix, 0.0, &dx_matrix.matrix);
+    matrix_mult(gain_T_matrix, residuals_matrix, dx_matrix);
 
     for (i=0; i<n; i++)
     {
@@ -227,6 +225,13 @@ void Filter::initialize_state()
             }
         }
     }
+}
+
+void Filter::matrix_mult(gsl_matrix_view a, gsl_matrix_view b, gsl_matrix_view c)
+{
+    /* matrix multiplication, C = AB
+    */
+    gsl_blas_dgemm (CblasNoTrans, CblasNoTrans, 1.0, &a.matrix, &b.matrix, 0.0, &c.matrix);
 }
 
 void Filter::initarrays()

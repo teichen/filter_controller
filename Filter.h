@@ -5,6 +5,8 @@
 #include "Model.h"
 #include "RungeKutta.h"
 
+#include <gsl/gsl_blas.h>
+
 #include <iostream>
 
 using namespace std;
@@ -41,6 +43,8 @@ public:
     void set_prior(double*, double*);
     void set_posterior(double*, double*);
     void update(double*, double*);
+
+    void matrix_mult(gsl_matrix_view, gsl_matrix_view, gsl_matrix_view);
 
     ~Filter();
 
