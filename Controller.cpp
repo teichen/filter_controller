@@ -45,7 +45,7 @@ void Controller::couple_filters_measurements()
     boot_filter(0);
 }
 
-void Controller::update_filters(double t, double* input_data)
+void Controller::update_filters(double t, double* input_data, int* prn_codes)
 {
     /* extended Kalman filter update
     */

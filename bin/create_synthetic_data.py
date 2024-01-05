@@ -37,11 +37,12 @@ def create_measurement_data(measurement_creator):
     """ create database of measurement data
     """
     carrier_name  = 'test_name'
-    carrier_phase = 0.5
-    measurement_time  = datetime(2005, 6, 1, 0, 0)
+    carrier_phase = 0.5 # cycles
+    transmission_time  = datetime(2005, 6, 1, 0, 0)
+    prn_code = [int(prn_element) for prn_element in np.array(np.floor(0.5 + random.rand(1023)))]
 
     measurements = [{'carrier_name': carrier_name, 'carrier_phase': carrier_phase, 
-            'measurement_time': measurement_time}]
+        'transmission_time': transmission_time, 'prn_code': prn_code}]
 
     measurement_creator.create_measurements(measurements)
 

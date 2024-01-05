@@ -29,9 +29,9 @@ class RetrieveMongoData:
             start_time (datetime)
             stop_time (datetime)
         Returns:
-            measurements (dict): dictionary of carrier phase by name, time
+            measurements (dict): dictionary of {carrier phase, prn code} by name, transmission time
         """
-        query = {'measurement_time': {'$gte': start_time, '$lt': stop_time}}
+        query = {'transmission_time': {'$gte': start_time, '$lt': stop_time}}
         cursor = self.db.find(query)
 
         measurements = {}
@@ -41,8 +41,8 @@ class RetrieveMongoData:
             
             if not (carrier_name in measurements):
                 measurements[carrier_name] = {}
-            measurement_time = doc['measurement_time']
-            measurements[carrier_name][measurement_time] = doc['carrier_phase']
+            transmission_time = doc['transmission_time']
+            measurements[carrier_name][transmission_time] = {'carrier_phase': doc['carrier_phase'], 'prn_code': doc['prn_code']}
 
         return measurements
 

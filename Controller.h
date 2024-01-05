@@ -30,7 +30,7 @@ public:
     VanderPolModel vanderpol_model;
 
     void couple_filters_measurements();
-    void update_filters(double, double*);
+    void update_filters(double, double*, int*);
     void boot_filter(int);
     void shutdown_filter(int);
 

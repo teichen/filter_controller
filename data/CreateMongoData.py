@@ -27,8 +27,11 @@ class CreateMongoData:
             from multiple carriers
 
         Args:
-            measurements (list): list of measure dictionaries each containing carrier_name (str),
-                                 carrier_phase (cycles), measurement_time (datetime.datetime)
+            measurements (list): list of measure dictionaries each containing
+                                 carrier_name (str),
+                                 carrier_phase (cycles), 
+                                 transmission_time (datetime.datetime),
+                                 prn_code (list)
         Returns: None
         """
         # add data to mongo session

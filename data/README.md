@@ -1,5 +1,5 @@
 # module setup:
-export PYTHONPATH='path/to/project'
+export PYTHONPATH='path_to_project/data'
 
 # mysql setup:
 add alias in ~/.bash_profile

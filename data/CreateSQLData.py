@@ -27,7 +27,8 @@ class Devices(Base):
         """
         Args:
             CARRIER_ID: device name
-            CARRIER_FREQ: carrier wave frequency, either 1575.42 MHz or 1227.6 MHz
+            CARRIER_FREQ: carrier wave frequency, no doppler shift,
+                          either 1575.42 MHz or 1227.6 MHz
         """
         self.CARRIER_ID = CARRIER_ID
         self.CARRIER_FREQ = CARRIER_FREQ
