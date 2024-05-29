@@ -25,12 +25,12 @@ def filter_data():
     inputs    = allocate_inputs()
 
     allocate_prn_codes = multifilter_controller.allocate_prn_codes
-    allocate_prn_codes.restype = POINTER(c_int * INPUT_BUFFER_SIZE * PRN_BUFFER_SIZE)
+    allocate_prn_codes.restype = POINTER(c_int * (INPUT_BUFFER_SIZE * PRN_BUFFER_SIZE))
     prn_codes = allocate_prn_codes()
 
     run = multifilter_controller.run
     run.restype  = c_void_p
-    run.argtypes = [POINTER(c_double * INPUT_BUFFER_SIZE), POINTER(c_int * INPUT_BUFFER_SIZE)]
+    run.argtypes = [POINTER(c_double * INPUT_BUFFER_SIZE), POINTER(c_int * (INPUT_BUFFER_SIZE * PRN_BUFFER_SIZE))]
 
     # define inputs {transmission_time (float), carrier_id (int), carrier_freq (float), 
     #                carrier_phase (float)}
@@ -48,7 +48,8 @@ def filter_data():
         inputs.contents[idx * 4 + 1] = carrier_id[idx]
         inputs.contents[idx * 4 + 2] = carrier_freq[idx]
         inputs.contents[idx * 4 + 3] = carrier_phase[idx]
-        prn_codes.contents[(idx * PRN_BUFFER_SIZE):((idx + 1) * PRN_BUFFER_SIZE)] = prn_code[idx]
+        for prn_element in range(PRN_BUFFER_SIZE):
+            prn_codes.contents[idx * PRN_BUFFER_SIZE + prn_element] = prn_code[idx][prn_element]
 
     run(inputs, prn_codes)
 
@@ -59,7 +60,7 @@ def filter_data():
 
     free_prn_codes = multifilter_controller.free_prn_codes
     free_prn_codes.restype  = c_void_p
-    free_prn_codes.argtypes = [POINTER(c_int * INPUT_BUFFER_SIZE * PRN_BUFFER_SIZE)]
+    free_prn_codes.argtypes = [POINTER(c_int * (INPUT_BUFFER_SIZE * PRN_BUFFER_SIZE))]
     free_prn_codes(prn_codes)
 
 def create_prn_code():
